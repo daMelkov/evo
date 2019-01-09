@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         private float sizeX;
         private float sizeY;
         private float radius;
-        private enum LineStyle {solid, dotted};
+        private enum LineStyle {solid, dotted}
         private int OFFSET = 20;
 
         public DrawView(Context context) {
@@ -36,8 +36,8 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            sizeX = canvas.getWidth();
-            sizeY = canvas.getHeight();
+            sizeX = getWidth();
+            sizeY = getHeight();
             radius = (float) (0.4 * (sizeX <= sizeY ? sizeX: sizeY));
 
             canvas.drawColor(0xfff0f0f0);
@@ -45,19 +45,12 @@ public class MainActivity extends Activity {
             drawAxis(canvas);
 
             Gear gear = new Gear(12, radius);
-            drawGear(canvas, gear, sizeX/2, sizeY/2);
+            gear.placeTo(new Point((int)sizeX/2, (int)sizeY/2));
+            drawGear(canvas, gear);
         }
 
-        private void drawGear(Canvas canvas, Gear gear, float x, float y) {
-            Paint paint = getPaint(1, 0xff404040, LineStyle.solid);
-
-            //canvas.drawCircle(sizeX/2,sizeY/2, r, paint);
-            //canvas.drawCircle(sizeX/2,sizeY/2, radius, paint);
-
-            //paint = getPaint(1, 0xff404040, MainActivity.DrawView.LineStyle.dotted);
-            //canvas.drawCircle(sizeX/2,sizeY/2, r, paint);
-
-            paint = getPaint(4, 0xff404040, MainActivity.DrawView.LineStyle.solid);
+        private void drawGear(Canvas canvas, Gear gear) {
+            Paint paint = getPaint(4, 0xff404040, MainActivity.DrawView.LineStyle.solid);
             Collection<Point> points = gear.getPoints();
 
             for(Point point: points){
