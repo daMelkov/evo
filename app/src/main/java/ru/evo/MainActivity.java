@@ -51,10 +51,20 @@ public class MainActivity extends Activity {
 
         private void drawGear(Canvas canvas, Gear gear) {
             Paint paint = getPaint(4, 0xff404040, MainActivity.DrawView.LineStyle.solid);
-            Collection<Point> points = gear.getPoints();
+            //Collection<Point> points = gear.getPoints();
 
-            for(Point point: points){
-                canvas.drawPoint(point.x, point.y, paint);
+
+            for(Gear.Tooth tooth: gear.getTooths()){
+                Point prevPoint = null;
+                for(Point point: tooth.getPoints()) {
+                    if (prevPoint != null) {
+                        canvas.drawLine(prevPoint.x, prevPoint.y, point.x, point.y, paint);
+                    }
+
+                    prevPoint = point;
+                }
+
+                //canvas.drawPoint(point.x, point.y, paint);
             }
         }
 
