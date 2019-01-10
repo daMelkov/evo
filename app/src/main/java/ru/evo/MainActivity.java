@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-import java.util.Collection;
 import ru.evo.model.Gear;
 
 public class MainActivity extends Activity {
@@ -45,7 +44,7 @@ public class MainActivity extends Activity {
             drawAxis(canvas);
 
             Gear gear = new Gear(12, radius);
-            gear.placeTo(new Point((int)sizeX/2, (int)sizeY/2));
+            gear.moveTo(new Point((int)sizeX/2, (int)sizeY/2));
             drawGear(canvas, gear);
         }
 

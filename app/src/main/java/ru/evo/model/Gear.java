@@ -51,7 +51,7 @@ public class Gear {
         }
     }
 
-    public void placeTo(Point newZeroPoint){
+    public void moveTo(Point newZeroPoint){
         int dx = newZeroPoint.x - mZeroPoint.x;
         int dy = newZeroPoint.y - mZeroPoint.y;
 
