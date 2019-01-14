@@ -22,6 +22,10 @@ public class MainActivity extends Activity {
     }
 
     static class DrawView extends View {
+        int framesPerSecond = 60;
+        long animationDuration = 1000;
+        long startTime;
+        Gear gear;
 
         private float sizeX;
         private float sizeY;
@@ -31,27 +35,41 @@ public class MainActivity extends Activity {
 
         public DrawView(Context context) {
             super(context);
+
+            //sizeX = getWidth();
+            //sizeY = getHeight();
+            sizeX = 1100;
+            sizeY = 1800;
+
+            //radius = (float) (0.4 * (sizeX <= sizeY ? sizeX: sizeY));
+            radius = 400;
+
+            gear = new Gear(12, radius);
+            gear.moveTo(new Point((int)sizeX/2, (int)sizeY/2));
+            //gear.rotate(0);
+
+            this.startTime = System.currentTimeMillis();
+            this.postInvalidate();
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
-            sizeX = getWidth();
-            sizeY = getHeight();
-            radius = (float) (0.4 * (sizeX <= sizeY ? sizeX: sizeY));
+            long elapsedTime = System.currentTimeMillis() - startTime;
 
             canvas.drawColor(0xfff0f0f0);
 
             drawAxis(canvas);
-
-            Gear gear = new Gear(12, radius);
-            gear.moveTo(new Point((int)sizeX/2, (int)sizeY/2));
+            //if(gear != null) {
+            //    gear.rotate(10);
+            //}
             drawGear(canvas, gear);
+
+            if(elapsedTime < animationDuration)
+                this.postInvalidateDelayed( 1000 / framesPerSecond);
         }
 
         private void drawGear(Canvas canvas, Gear gear) {
             Paint paint = getPaint(4, 0xff404040, MainActivity.DrawView.LineStyle.solid);
-            //Collection<Point> points = gear.getPoints();
-
 
             for(Gear.Tooth tooth: gear.getTooths()){
                 Point prevPoint = null;
@@ -59,11 +77,8 @@ public class MainActivity extends Activity {
                     if (prevPoint != null) {
                         canvas.drawLine(prevPoint.x, prevPoint.y, point.x, point.y, paint);
                     }
-
                     prevPoint = point;
                 }
-
-                //canvas.drawPoint(point.x, point.y, paint);
             }
         }
 

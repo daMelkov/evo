@@ -29,6 +29,7 @@ public class Gear {
     }
 
     private Collection<Tooth> mTooths; // зубья
+    private float mAlpha;
 
     public Gear(int z, float r2) {
         _z = z;
@@ -40,13 +41,13 @@ public class Gear {
         _r1 = _rd - _h1;
 
         mZeroPoint = new Point(0,0);
+        mAlpha = 0;
 
         mTooths = new ArrayList<>();
         for(int i=1; i<=_z; i++){
             float toothAngle = (float) (2*Math.PI/_z*i); // угол поворота зуба согласно его положению на зубчатом колесе
 
             Tooth tooth = new Tooth(toothAngle);
-            //Tooth tooth = new Tooth(0);
             mTooths.add(tooth);
         }
     }
@@ -61,9 +62,11 @@ public class Gear {
                 point.y = point.y + dy;
             }
         }
+
+        mZeroPoint = newZeroPoint;
     }
 
-    public Collection<Point> getPoints(){
+    private Collection<Point> getPoints(){
         Collection<Point> result = new ArrayList<>();
 
         for(Tooth tooth: mTooths){
@@ -71,6 +74,21 @@ public class Gear {
         }
 
         return result;
+    }
+
+    public void rotate(float alpha) {
+        for(Tooth tooth: mTooths){
+            for(Point point: tooth.getPoints()){
+                float R = (float) sqrt(pow(point.x - mZeroPoint.x, 2) + pow(point.y - mZeroPoint.y, 2));
+                float beta = (float) acos((point.x - mZeroPoint.x)/R);
+                beta = beta - (float)(alpha * Math.PI / 180); // поворот на alpha градусов по часовой стрелке
+
+                point.x = (int) (mZeroPoint.x + R * cos(beta));
+                point.y = (int) (mZeroPoint.y + R * sin(beta));
+            }
+        }
+
+
     }
 
     public class Tooth {
@@ -151,6 +169,17 @@ public class Gear {
                 mPoints.add(newPoints.pop());
             }
             //mPoints.addAll(newPoints);
+        }
+
+        @Override
+        public String toString(){
+            String result = "";
+
+            for(Point point: mPoints){
+                result = result + "{" + point.x + ";" + point.y + "}, ";
+            }
+
+            return result;
         }
     }
 }
