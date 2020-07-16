@@ -158,7 +158,7 @@ public class Gear {
         }
 
         private void mirror(){
-            Stack<Point> newPoints = new Stack();
+            Stack<Point> newPoints = new Stack<>();
 
             for(Point point: mPoints){
                 Point newPoint = new Point(-point.x, point.y);
